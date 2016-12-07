@@ -4,6 +4,8 @@
 
 #include "ioperand_factory.h"
 #include "ioperand.h"
+#include "lexer.h"
+#include "error_formatter.h"
 
 int main(int ac, char **av) {
 
@@ -47,7 +49,12 @@ int main(int ac, char **av) {
     }
   }
 
-  std::cout << src;
+  std::cout << src << std::endl;
+
+  Lexer lexer(src);
+  ErrorFormatter formatter(src);
+
+  lexer.setFormatter(formatter);
 
   return 0;
 }
