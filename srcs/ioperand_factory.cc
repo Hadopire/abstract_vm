@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <iostream>
 
-#include "operand.h"
-#include "ioperand_factory.h"
+#include "operand.hpp"
+#include "ioperand_factory.hpp"
 
 IOperandFactory & IOperandFactory::getInstance() {
   static IOperandFactory factory;

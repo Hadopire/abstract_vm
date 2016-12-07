@@ -1,6 +1,7 @@
 #include <sstream>
+#include <cstring>
 
-#include "error_formatter.h"
+#include "error_formatter.hpp"
 
 ErrorFormatter::ErrorFormatter() {}
 
@@ -35,12 +36,12 @@ void ErrorFormatter::setSource(const std::string & src) {
 
 const std::string ErrorFormatter::format(const std::string & message, size_t line, size_t column) const {
   std::stringstream stream;
-  std::string errMsg;
 
   stream << line << ":" << column << " error: " << message << std::endl;
   stream << mSplitSrc[line - 1] << std::endl;
 
-  for (int c = 1; c < column; ++c) {
+  int c;
+  for (c = 1; c < column; ++c) {
     if (mSplitSrc[line - 1][c - 1] == '\t') {
       stream << "\t";
     }
@@ -49,9 +50,16 @@ const std::string ErrorFormatter::format(const std::string & message, size_t lin
     }
   }
 
-  stream << "^" << std::endl;
-  stream >> errMsg;
-  return errMsg;
+  stream << "^";
+  for (++c; c < mSplitSrc[line - 1].size(); ++c) {
+    if (isspace(mSplitSrc[line - 1][c - 1]) || mSplitSrc[line - 1][c - 1] == ';') {
+      break;
+    }
+    stream << "~";
+  }
+
+  stream << std::endl;
+  return stream.str();
 }
 
 bool ErrorFormatter::isActive() const {

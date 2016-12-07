@@ -5,9 +5,9 @@
 #include <cmath>
 #include <algorithm>
 
-#include "eoperand_type.h"
-#include "ioperand.h"
-#include "ioperand_factory.h"
+#include "eoperand_type.hpp"
+#include "ioperand.hpp"
+#include "ioperand_factory.hpp"
 
 template<typename T>
 class Operand : public IOperand {

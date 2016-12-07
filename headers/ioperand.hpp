@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eoperand_type.h"
+#include "eoperand_type.hpp"
 
 class IOperand{
 

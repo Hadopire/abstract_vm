@@ -1,12 +1,13 @@
 #pragma once
 
 #include <string>
+#include <cctype>
 #include <sstream>
 #include <regex>
 #include <functional>
 #include <utility>
 
-#include "error_formatter.h"
+#include "error_formatter.hpp"
 
 enum class TokenType {
   kInt8,
@@ -23,6 +24,7 @@ enum class TokenType {
   kPop,
   kDump,
   kPrint,
+  kAssert,
   kExit,
   kComment,
   kNewLine,
@@ -53,7 +55,7 @@ class Lexer {
     class Exception : public std::exception {
       public:
         Exception();
-        Exception(const char * err);
+        Exception(const std::string & err);
         Exception(const Exception & exception);
 
         Exception & operator=(const Exception & rhs);
@@ -63,7 +65,7 @@ class Lexer {
         ~Exception();
 
       private:
-        const char * message;
+        std::string message;
     };
 
   private:
@@ -78,15 +80,15 @@ class Lexer {
 
     struct TokenHandler {
       TokenType type;
-      std::function<const Token (Lexer &, TokenType, std::string)> handler;
+      std::function<const Token (Lexer &, TokenType, std::string)> handlerFunc;
     };
 
-    const std::pair<std::string, TokenHandler> mRegToHandler[13]{
-      {"int8\\([0-9]+\\.?([0-9]+)?\\)",   {TokenType::kInt8, &Lexer::numericToken}},
-      {"int16\\([0-9]+\\.?([0-9]+)?\\)",  {TokenType::kInt16, &Lexer::numericToken}},
-      {"int32\\([0-9]+\\.?([0-9]+)?\\)",  {TokenType::kInt32, &Lexer::numericToken}},
-      {"float\\([0-9]+\\.?([0-9]+)?\\)",  {TokenType::kFloat, &Lexer::numericToken}},
-      {"double\\([0-9]+\\.?([0-9]+)?\\)", {TokenType::kDouble, &Lexer::numericToken}},
+    const std::pair<std::string, TokenHandler> mRegToHandler[17]{
+      {"int8\\(.+\\)",   {TokenType::kInt8, &Lexer::numericToken}},
+      {"int16\\(.+\\)",  {TokenType::kInt16, &Lexer::numericToken}},
+      {"int32\\(.+\\)",  {TokenType::kInt32, &Lexer::numericToken}},
+      {"float\\(.+\\)",  {TokenType::kFloat, &Lexer::numericToken}},
+      {"double\\(.+\\)", {TokenType::kDouble, &Lexer::numericToken}},
       {"add",                             {TokenType::kAdd, &Lexer::basicToken}},
       {"sub",                             {TokenType::kSub, &Lexer::basicToken}},
       {"mul",                             {TokenType::kMul, &Lexer::basicToken}},
@@ -96,8 +98,9 @@ class Lexer {
       {"pop",                             {TokenType::kPop, &Lexer::basicToken}},
       {"dump",                            {TokenType::kDump, &Lexer::basicToken}},
       {"print",                           {TokenType::kPrint, &Lexer::basicToken}},
+      {"assert",                          {TokenType::kAssert, &Lexer::basicToken}},
       {"exit",                            {TokenType::kExit, &Lexer::basicToken}},
-      {"^;.+",                            {TokenType::kComment, &Lexer::commentToken}}
+      {";(.+)?",                          {TokenType::kComment, &Lexer::commentToken}}
     };
 
     const Token numericToken(TokenType type, std::string value);

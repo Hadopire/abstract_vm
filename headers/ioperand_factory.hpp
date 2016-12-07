@@ -3,8 +3,8 @@
 #include <string>
 #include <functional>
 
-#include "ioperand.h"
-#include "eoperand_type.h"
+#include "ioperand.hpp"
+#include "eoperand_type.hpp"
 
 class IOperandFactory {
 

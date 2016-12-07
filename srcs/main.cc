@@ -2,13 +2,12 @@
 #include <fstream>
 #include <string>
 
-#include "ioperand_factory.h"
-#include "ioperand.h"
-#include "lexer.h"
-#include "error_formatter.h"
+#include "ioperand_factory.hpp"
+#include "ioperand.hpp"
+#include "lexer.hpp"
+#include "error_formatter.hpp"
 
-int main(int ac, char **av) {
-
+const std::string readSrc(int ac, char **av) {
   std::string src;
 
   if (ac > 1) {
@@ -24,11 +23,12 @@ int main(int ac, char **av) {
     }
     catch (std::exception & e) {
       std::cerr << "failed to open " << av[1] << std::endl;
-      return -1;
+      exit(-1);
     }
   }
   else {
     bool finish = false;
+
     while (!finish) {
       std::string buffer;
 
@@ -48,13 +48,34 @@ int main(int ac, char **av) {
       }
     }
   }
+  return src;
+}
 
-  std::cout << src << std::endl;
+int main(int ac, char **av) {
+
+  const std::string src = readSrc(ac, av);
 
   Lexer lexer(src);
+  Token token{TokenType::kNewLine};
   ErrorFormatter formatter(src);
+  size_t errorCount = 0;
 
   lexer.setFormatter(formatter);
+
+  while (token.type != TokenType::kEndOfInput) {
+    try {
+      token = lexer.next();
+    }
+    catch (Lexer::Exception & e) {
+      std::cerr << e.what();
+      ++errorCount;
+    }
+  }
+
+  if (errorCount > 0) {
+    std::cerr << "Total lexer errors: " << errorCount << std::endl;
+    return -1;
+  }
 
   return 0;
 }

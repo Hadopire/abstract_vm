@@ -1,5 +1,5 @@
 #include <cstdint>
-#include "operand.h"
+#include "operand.hpp"
 
 template<>
 eOperandType Operand<int8_t>::getType() const {

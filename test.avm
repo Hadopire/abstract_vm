@@ -1,0 +1,16 @@
+; -------------
+; sample.avm -
+; -------------
+push int32(42);;;;
+push int32(33);;
+add; commentaire adfsdfdsf
+push float(44.55);;;;
+mul;ALO
+push double(42.42) ;commentaire
+push int32(42) ; lala
+dump
+pop
+assert double(42.42)
+exit
+assert double(42..2)
+cout << "wtf"
