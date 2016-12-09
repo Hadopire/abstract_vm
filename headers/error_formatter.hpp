@@ -21,4 +21,9 @@ class ErrorFormatter {
   private:
     std::vector<std::string> mSplitSrc;
     bool mIsActive{false};
+
+    std::string mDefault;
+    std::string mRedBold;
+    std::string mWhiteBold;
+    std::string mGreenBold;
 };

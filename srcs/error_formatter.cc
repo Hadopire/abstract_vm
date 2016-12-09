@@ -1,5 +1,6 @@
 #include <sstream>
 #include <cstring>
+#include <unistd.h>
 
 #include "error_formatter.hpp"
 
@@ -11,17 +12,26 @@ ErrorFormatter::ErrorFormatter(const std::string & src) {
 
 ErrorFormatter::ErrorFormatter(const ErrorFormatter & formatter) :
   mSplitSrc(formatter.mSplitSrc),
-  mIsActive(formatter.mIsActive) {}
+  mIsActive(formatter.mIsActive),
+  mDefault(formatter.mDefault),
+  mRedBold(formatter.mRedBold),
+  mWhiteBold(formatter.mWhiteBold),
+  mGreenBold(formatter.mGreenBold) {}
 
 ErrorFormatter & ErrorFormatter::operator=(const ErrorFormatter & rhs) {
   mSplitSrc = rhs.mSplitSrc;
   mIsActive = rhs.mIsActive;
+  mDefault = rhs.mDefault;
+  mRedBold = rhs.mRedBold;
+  mWhiteBold = rhs.mWhiteBold;
+  mGreenBold = rhs.mGreenBold;
 
   return *this;
 }
 
 ErrorFormatter::~ErrorFormatter() {}
 
+#include <iostream>
 void ErrorFormatter::setSource(const std::string & src) {
   std::stringstream stream;
   stream.str(src);
@@ -32,14 +42,25 @@ void ErrorFormatter::setSource(const std::string & src) {
   }
 
   mIsActive = true;
+
+  if (isatty(1)) {
+    mDefault = "\033[0m";
+    mRedBold = "\033[1;31m";
+    mWhiteBold = "\033[1;37m";
+    mGreenBold = "\033[1;32m";
+  }
 }
 
 const std::string ErrorFormatter::format(const std::string & message, size_t line, size_t column) const {
+  if (!mIsActive) {
+    return "";
+  }
+
   std::stringstream stream;
+  stream << mWhiteBold << line << ":" << column << mRedBold << " error: " << mWhiteBold << message << std::endl;
+  stream << mDefault << mSplitSrc[line - 1] << std::endl;
 
-  stream << line << ":" << column << " error: " << message << std::endl;
-  stream << mSplitSrc[line - 1] << std::endl;
-
+  stream << mGreenBold;
   int c;
   for (c = 1; c < column; ++c) {
     if (mSplitSrc[line - 1][c - 1] == '\t') {
@@ -58,7 +79,7 @@ const std::string ErrorFormatter::format(const std::string & message, size_t lin
     stream << "~";
   }
 
-  stream << std::endl;
+  stream << std::endl << mDefault;
   return stream.str();
 }
 
