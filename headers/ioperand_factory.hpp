@@ -12,6 +12,22 @@ class IOperandFactory {
     static IOperandFactory & getInstance( void );
     const IOperand * createOperand( eOperandType type, const std::string & value ) const;
 
+    class Exception : public std::out_of_range {
+      public:
+        Exception();
+        Exception(const std::string & err);
+        Exception(const Exception & exception);
+
+        Exception & operator=(const Exception & rhs);
+
+        const char * what() const throw();
+
+        ~Exception();
+
+      private:
+        std::string message;
+    };
+
   private:
     std::function<const IOperand *(const IOperandFactory &, const std::string &)> createOp[5] {
       &IOperandFactory::createInt8,
