@@ -84,23 +84,23 @@ class Lexer {
     };
 
     const std::pair<std::string, TokenHandler> mRegToHandler[17]{
-      {"int8\\(.+\\)",   {TokenType::kInt8, &Lexer::numericToken}},
-      {"int16\\(.+\\)",  {TokenType::kInt16, &Lexer::numericToken}},
-      {"int32\\(.+\\)",  {TokenType::kInt32, &Lexer::numericToken}},
-      {"float\\(.+\\)",  {TokenType::kFloat, &Lexer::numericToken}},
-      {"double\\(.+\\)", {TokenType::kDouble, &Lexer::numericToken}},
-      {"add",                             {TokenType::kAdd, &Lexer::basicToken}},
-      {"sub",                             {TokenType::kSub, &Lexer::basicToken}},
-      {"mul",                             {TokenType::kMul, &Lexer::basicToken}},
-      {"div",                             {TokenType::kDiv, &Lexer::basicToken}},
-      {"mod",                             {TokenType::kMod, &Lexer::basicToken}},
-      {"push",                            {TokenType::kPush, &Lexer::basicToken}},
-      {"pop",                             {TokenType::kPop, &Lexer::basicToken}},
-      {"dump",                            {TokenType::kDump, &Lexer::basicToken}},
-      {"print",                           {TokenType::kPrint, &Lexer::basicToken}},
-      {"assert",                          {TokenType::kAssert, &Lexer::basicToken}},
-      {"exit",                            {TokenType::kExit, &Lexer::basicToken}},
-      {";(.+)?",                          {TokenType::kComment, &Lexer::commentToken}}
+      {"int8\\(.+\\)",   {TokenType::kInt8,    &Lexer::numericToken}},
+      {"int16\\(.+\\)",  {TokenType::kInt16,   &Lexer::numericToken}},
+      {"int32\\(.+\\)",  {TokenType::kInt32,   &Lexer::numericToken}},
+      {"float\\(.+\\)",  {TokenType::kFloat,   &Lexer::numericToken}},
+      {"double\\(.+\\)", {TokenType::kDouble,  &Lexer::numericToken}},
+      {"add",            {TokenType::kAdd,     &Lexer::basicToken}},
+      {"sub",            {TokenType::kSub,     &Lexer::basicToken}},
+      {"mul",            {TokenType::kMul,     &Lexer::basicToken}},
+      {"div",            {TokenType::kDiv,     &Lexer::basicToken}},
+      {"mod",            {TokenType::kMod,     &Lexer::basicToken}},
+      {"push",           {TokenType::kPush,    &Lexer::basicToken}},
+      {"pop",            {TokenType::kPop,     &Lexer::basicToken}},
+      {"dump",           {TokenType::kDump,    &Lexer::basicToken}},
+      {"print",          {TokenType::kPrint,   &Lexer::basicToken}},
+      {"assert",         {TokenType::kAssert,  &Lexer::basicToken}},
+      {"exit",           {TokenType::kExit,    &Lexer::basicToken}},
+      {";(.+)?",         {TokenType::kComment, &Lexer::commentToken}}
     };
 
     const Token numericToken(TokenType type, std::string value);
