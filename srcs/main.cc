@@ -1,11 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
 
 #include "ioperand_factory.hpp"
 #include "ioperand.hpp"
 #include "lexer.hpp"
 #include "error_formatter.hpp"
+#include "parser.hpp"
+#include "machine.hpp"
 
 const std::string readSrc(int ac, char **av) {
   std::string src;
@@ -54,17 +57,19 @@ const std::string readSrc(int ac, char **av) {
 int main(int ac, char **av) {
 
   const std::string src = readSrc(ac, av);
-
-  Lexer lexer(src);
-  Token token{TokenType::kNewLine};
   ErrorFormatter formatter(src);
+
   size_t errorCount = 0;
 
+  Lexer lexer(src);
   lexer.setFormatter(formatter);
 
+  std::list<Token> tokens;
+  Token token{TokenType::kNewLine};
   while (token.type != TokenType::kEndOfInput) {
     try {
       token = lexer.next();
+      tokens.push_back(token);
     }
     catch (Lexer::Exception & e) {
       std::cerr << e.what();
@@ -73,9 +78,45 @@ int main(int ac, char **av) {
   }
 
   if (errorCount > 0) {
-    std::cerr << "Total lexer errors: " << errorCount << std::endl;
+    std::cerr << "Total lexer error: " << errorCount << std::endl;
     return -1;
   }
+
+  for (auto t : tokens) {
+    std::cout << t.value << std::endl;
+  }
+
+  Parser parser(tokens);
+  parser.setFormatter(formatter);
+
+  std::function<void (Machine &)> instr;
+  std::list<std::function<void (Machine &)>> instructions;
+  while (parser.isFinish() == false) {
+    try {
+      instr = parser.next();
+      instructions.push_back(instr);
+    }
+    catch (Parser::Exception & e) {
+      std::cerr << e.what();
+      ++errorCount;
+    }
+  }
+
+  if (errorCount > 0) {
+    std::cerr << "Total parser error: " << errorCount << std::endl;
+    return -1;
+  }
+
+/*  Machine machine;
+  for (auto & func : instructions) {
+    try {
+      func(machine);
+    }
+    catch (Machine::Exception & e) {
+      std::cerr << e.what();
+      return -1;
+    }
+  }*/
 
   return 0;
 }

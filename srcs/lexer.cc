@@ -31,7 +31,7 @@ const Token Lexer::next() {
   }
 
   if (mPos >= mSrc.size()) {
-    return {TokenType::kEndOfInput};
+    return {TokenType::kEndOfInput, "<EOF>", mLine, 0};
   }
   else if (mSrc[mPos] == '\n') {
     ++mPos;
