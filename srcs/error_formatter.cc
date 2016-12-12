@@ -31,7 +31,6 @@ ErrorFormatter & ErrorFormatter::operator=(const ErrorFormatter & rhs) {
 
 ErrorFormatter::~ErrorFormatter() {}
 
-#include <iostream>
 void ErrorFormatter::setSource(const std::string & src) {
   std::stringstream stream;
   stream.str(src);
@@ -80,6 +79,18 @@ const std::string ErrorFormatter::format(const std::string & message, size_t lin
   }
 
   stream << std::endl << mDefault;
+  return stream.str();
+}
+
+const std::string ErrorFormatter::formatBasic(const std::string & message, size_t line, size_t column) const {
+  if (!mIsActive) {
+    return "";
+  }
+
+  std::stringstream stream;
+  stream << mWhiteBold << line << ":" << column << mRedBold << " error: " << mWhiteBold << message << std::endl;
+  stream << mDefault;
+
   return stream.str();
 }
 

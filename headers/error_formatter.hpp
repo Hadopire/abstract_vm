@@ -15,6 +15,7 @@ class ErrorFormatter {
 
     void setSource(const std::string & src);
     const std::string format(const std::string & message, size_t line, size_t column) const;
+    const std::string formatBasic(const std::string & message, size_t line, size_t column) const;
 
     bool isActive() const;
 
