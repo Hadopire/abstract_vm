@@ -21,6 +21,18 @@ const char * Machine::Exception::what() const throw() {
 
 Machine::Exception::~Exception() {}
 
+Machine::Machine() {}
+
+Machine::Machine(const Machine & machine) : mStack(machine.mStack), mFormatter(machine.mFormatter) {}
+
+Machine & Machine::operator=(const Machine & rhs) {
+  mStack = rhs.mStack;
+  mFormatter = rhs.mFormatter;
+  return *this;
+}
+
+Machine::~Machine() {}
+
 void Machine::Add(const Token & token) {
   if (mStack.size() < 2) {
     error("'add' on stack with less than two operands", token.line, token.column);
