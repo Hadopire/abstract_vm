@@ -12,5 +12,3 @@ dump
 pop
 assert double(42.42)
 exit
-assert double(42..2)
-cout << "wtf"

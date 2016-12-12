@@ -37,7 +37,7 @@ const Token Lexer::next() {
     ++mPos;
     ++mLine;
     mColumn = 1;
-    return {TokenType::kNewLine, "<NewLine>"};
+    return {TokenType::kNewLine, "<NewLine>", 0, 0};
   }
 
   std::string tokenString = extractTokenString();

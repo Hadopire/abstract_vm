@@ -38,7 +38,7 @@ const IOperand * IOperandFactory::createInt8(std::string const & value) const {
     lValue = std::stol(value);
   }
   catch(std::out_of_range & e) {
-    throw IOperandFactory::Exception(e.what());
+    throw IOperandFactory::Exception("Int8 overflow on value '" + value + "'");
   }
 
   if (lValue < INT8_MIN || lValue > INT8_MAX) {
@@ -56,7 +56,7 @@ const IOperand * IOperandFactory::createInt16(std::string const & value) const {
     lValue = std::stol(value);
   }
   catch(std::out_of_range & e) {
-    throw IOperandFactory::Exception(e.what());
+    throw IOperandFactory::Exception("Int16 overflow on value '" + value + "'");
   }
 
   if (lValue < INT16_MIN || lValue > INT16_MAX) {
@@ -74,7 +74,7 @@ const IOperand * IOperandFactory::createInt32(std::string const & value) const {
     lValue = std::stol(value);
   }
   catch(std::out_of_range & e) {
-    throw IOperandFactory::Exception(e.what());
+    throw IOperandFactory::Exception("Int32 overflow on value '" + value + "'");
   }
 
   if (lValue < INT32_MIN || lValue > INT32_MAX) {
@@ -92,7 +92,7 @@ const IOperand * IOperandFactory::createFloat(std::string const & value) const {
     fValue = std::stof(value);
   }
   catch(std::out_of_range & e) {
-    throw IOperandFactory::Exception(e.what());
+    throw IOperandFactory::Exception("Float overflow on value '" + value + "'");
   }
 
   float opValue = static_cast<float>(fValue);
@@ -106,7 +106,7 @@ const IOperand * IOperandFactory::createDouble(std::string const & value) const 
     dValue = std::stof(value);
   }
   catch(std::out_of_range & e) {
-    throw IOperandFactory::Exception(e.what());
+    throw IOperandFactory::Exception("Double overflow on value '" + value + "'");
   }
 
   double opValue = static_cast<double>(dValue);

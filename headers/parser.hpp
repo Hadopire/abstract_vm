@@ -3,6 +3,7 @@
 #include <list>
 #include <functional>
 #include <vector>
+#include <map>
 
 #include "lexer.hpp"
 #include "machine.hpp"
@@ -43,6 +44,28 @@ class Parser {
     std::list<Token>::iterator mPos;
     ErrorFormatter mFormatter;
     bool mExit{ false };
+
+    const std::vector<TokenType> mIntegerTypes {
+      TokenType::kInt8,
+      TokenType::kInt16,
+      TokenType::kInt32
+    };
+    const std::vector<TokenType> mFloatTypes {
+      TokenType::kFloat,
+      TokenType::kDouble
+    };
+
+    std::map<TokenType, std::function<void (Machine &, const Token &)>> mTokenToInst {
+      {TokenType::kAdd, &Machine::add},
+      {TokenType::kSub, &Machine::sub},
+      {TokenType::kMul, &Machine::mul},
+      {TokenType::kDiv, &Machine::div},
+      {TokenType::kMod, &Machine::mod},
+      {TokenType::kPop, &Machine::pop},
+      {TokenType::kPrint, &Machine::print},
+      {TokenType::kDump, &Machine::dump},
+      {TokenType::kExit, &Machine::exit}
+    };
 
     std::function<void (Machine &)> pushExpr(std::vector<Token> & expr);
     std::function<void (Machine &)> assertExpr(std::vector<Token> & expr);

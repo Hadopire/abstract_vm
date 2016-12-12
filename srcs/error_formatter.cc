@@ -60,7 +60,7 @@ const std::string ErrorFormatter::format(const std::string & message, size_t lin
   stream << mDefault << mSplitSrc[line - 1] << std::endl;
 
   stream << mGreenBold;
-  int c;
+  size_t c;
   for (c = 1; c < column; ++c) {
     if (mSplitSrc[line - 1][c - 1] == '\t') {
       stream << "\t";

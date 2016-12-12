@@ -14,17 +14,17 @@ class Machine {
 
     void setFormatter(const ErrorFormatter & formatter);
 
-    void Add(const Token & token);
-    void Sub(const Token & token);
-    void Mul(const Token & token);
-    void Div(const Token & token);
-    void Mod(const Token & token);
-    void Push(const Token & token, eOperandType type, const std::string & value);
-    void Pop(const Token & token);
-    void Print(const Token & token);
-    void Dump(const Token & token);
-    void Assert(const Token & token, eOperandType type, const std::string & value);
-    void Exit(const Token & token);
+    void add(const Token & token);
+    void sub(const Token & token);
+    void mul(const Token & token);
+    void div(const Token & token);
+    void mod(const Token & token);
+    void push(const Token & token, eOperandType type, const std::string & value);
+    void pop(const Token & token);
+    void print(const Token & token);
+    void dump(const Token & token);
+    void assert(const Token & token, eOperandType type, const std::string & value);
+    void exit(const Token & token);
 
     Machine & operator=(const Machine & rhs);
 

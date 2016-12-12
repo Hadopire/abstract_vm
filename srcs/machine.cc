@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 
 #include "machine.hpp"
@@ -33,7 +34,7 @@ Machine & Machine::operator=(const Machine & rhs) {
 
 Machine::~Machine() {}
 
-void Machine::Add(const Token & token) {
+void Machine::add(const Token & token) {
   if (mStack.size() < 2) {
     error("'add' on stack with less than two operands", token.line, token.column);
   }
@@ -54,7 +55,7 @@ void Machine::Add(const Token & token) {
   delete v2;
 }
 
-void Machine::Sub(const Token & token) {
+void Machine::sub(const Token & token) {
   if (mStack.size() < 2) {
     error("'sub' on stack with less than two operands", token.line, token.column);
   }
@@ -75,7 +76,7 @@ void Machine::Sub(const Token & token) {
   delete v2;
 }
 
-void Machine::Mul(const Token & token) {
+void Machine::mul(const Token & token) {
   if (mStack.size() < 2) {
     error("'mul' on stack with less than two operands", token.line, token.column);
   }
@@ -96,7 +97,7 @@ void Machine::Mul(const Token & token) {
   delete v2;
 }
 
-void Machine::Div(const Token & token) {
+void Machine::div(const Token & token) {
   if (mStack.size() < 2) {
     error("'div' on stack with less than two operands", token.line, token.column);
   }
@@ -117,7 +118,7 @@ void Machine::Div(const Token & token) {
   delete v2;
 }
 
-void Machine::Mod(const Token & token) {
+void Machine::mod(const Token & token) {
   if (mStack.size() < 2) {
     error("'mod' on stack with less than two operands", token.line, token.column);
   }
@@ -138,7 +139,7 @@ void Machine::Mod(const Token & token) {
   delete v2;
 }
 
-void Machine::Push(const Token & token, eOperandType type, const std::string & value) {
+void Machine::push(const Token & token, eOperandType type, const std::string & value) {
   IOperandFactory factory = IOperandFactory::getInstance();
   const IOperand * operand;
 
@@ -152,7 +153,7 @@ void Machine::Push(const Token & token, eOperandType type, const std::string & v
   mStack.push_front(operand);
 }
 
-void Machine::Pop(const Token & token) {
+void Machine::pop(const Token & token) {
   if (mStack.size() < 1) {
     error("'pop' on empty stack", token.line, token.column);
   }
@@ -161,7 +162,7 @@ void Machine::Pop(const Token & token) {
   mStack.pop_front();
 }
 
-void Machine::Print(const Token & token) {
+void Machine::print(const Token & token) {
   if (mStack.size() < 1) {
     error("'print' on empty stack", token.line, token.column);
   }
@@ -177,20 +178,26 @@ void Machine::Print(const Token & token) {
   }
 }
 
-void Machine::Dump(const Token & token) {
-  for (auto i = mStack.rbegin(); i < mStack.rend(); ++i) {
+void Machine::dump(const Token & token) {
+  for (auto i = mStack.rbegin(); i != mStack.rend(); ++i) {
     std::cout << (*i)->toString() << std::endl;
   }
 }
 
-void Machine::Assert(const Token & token, eOperandType type, const std::string & value) {
-  if (mStack.front()->toString().compare(value) != 0) {
+void Machine::assert(const Token & token, eOperandType type, const std::string & value) {
+  if (mStack.size() < 1) {
+    error("'assert' on empty stacl", token.line, token.column);
+  }
+
+  const IOperand * front = mStack.front();
+  std::string frontStackValue = front->toString();
+  if (frontStackValue.compare(value) != 0) {
     error("assert fail", token.line, token.column);
   }
 }
 
-void Machine::Exit(const Token & token) {
-  exit(0);
+void Machine::exit(const Token & token) {
+  std::exit(0);
 }
 
 void Machine::error(const std::string & message, size_t line, size_t column) const {
@@ -204,4 +211,8 @@ void Machine::error(const std::string & message, size_t line, size_t column) con
   }
 
   throw Machine::Exception(err);
+}
+
+void Machine::setFormatter(const ErrorFormatter & formatter) {
+  mFormatter = formatter;
 }

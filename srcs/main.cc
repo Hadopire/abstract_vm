@@ -36,8 +36,9 @@ const std::string readSrc(int ac, char **av) {
       std::string buffer;
 
       std::getline(std::cin, buffer);
-      if (std::cin.eof() == 1) {
+      if (std::cin.eof() == 1 ) {
         std::cin.clear();
+        std::cin.ignore();
       }
       else {
         buffer.append("\n");
@@ -55,7 +56,6 @@ const std::string readSrc(int ac, char **av) {
 }
 
 int main(int ac, char **av) {
-
   const std::string src = readSrc(ac, av);
   ErrorFormatter formatter(src);
 
@@ -65,7 +65,7 @@ int main(int ac, char **av) {
   lexer.setFormatter(formatter);
 
   std::list<Token> tokens;
-  Token token{TokenType::kNewLine};
+  Token token{TokenType::kNewLine, "", 0, 0};
   while (token.type != TokenType::kEndOfInput) {
     try {
       token = lexer.next();
@@ -80,10 +80,6 @@ int main(int ac, char **av) {
   if (errorCount > 0) {
     std::cerr << "Total lexer error: " << errorCount << std::endl;
     return -1;
-  }
-
-  for (auto t : tokens) {
-    std::cout << t.value << std::endl;
   }
 
   Parser parser(tokens);
@@ -107,7 +103,8 @@ int main(int ac, char **av) {
     return -1;
   }
 
-/*  Machine machine;
+  Machine machine;
+  machine.setFormatter(formatter);
   for (auto & func : instructions) {
     try {
       func(machine);
@@ -116,7 +113,7 @@ int main(int ac, char **av) {
       std::cerr << e.what();
       return -1;
     }
-  }*/
+  }
 
   return 0;
 }
