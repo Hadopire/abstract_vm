@@ -2,6 +2,13 @@
 #include "operand.hpp"
 
 template<>
+Operand<int8_t>::Operand(int8_t & value) : value(value) {
+  std::stringstream strStream;
+  strStream << static_cast<int>(value);
+  strStream >> this->strValue;
+}
+
+template<>
 eOperandType Operand<int8_t>::getType() const {
   return eOperandType::kInt8;
 }

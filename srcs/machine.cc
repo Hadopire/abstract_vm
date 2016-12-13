@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 #include "machine.hpp"
 #include "ioperand_factory.hpp"
@@ -107,6 +108,10 @@ void Machine::div(const Token & token) {
   const IOperand *v2 = mStack.front();
   mStack.pop_front();
 
+  if (v2->toString() == "0") {
+    error("division by 0", token.line, token.column);
+  }
+
   try {
     mStack.push_front(*v1 / *v2);
   }
@@ -127,6 +132,10 @@ void Machine::mod(const Token & token) {
   mStack.pop_front();
   const IOperand *v2 = mStack.front();
   mStack.pop_front();
+
+  if (v2->toString() == "0") {
+    error("mod by 0", token.line, token.column);
+  }
 
   try {
     mStack.push_front(*v1 % *v2);
@@ -171,7 +180,7 @@ void Machine::print(const Token & token) {
     const IOperand * iOperand = mStack.front();
     const Operand<int8_t> * operand = dynamic_cast<const Operand<int8_t> *>(iOperand);
 
-    std::cout << operand->toString();
+    std::cout << static_cast<char>(std::stoi(operand->toString()));
   }
   catch (const std::bad_cast & e) {
     error("value at the top of the stack not a 8bit integer", token.line, token.column);
