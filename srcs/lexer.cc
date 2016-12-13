@@ -62,7 +62,7 @@ void Lexer::setFormatter(const ErrorFormatter & formatter) {
 
 const Token Lexer::numericToken(TokenType type, std::string value) {
   std::string numLiteral(value.begin() + value.find('(') + 1, value.end() - 1);
-  std::regex numRegex("[0-9]+\\.?([0-9]+)?");
+  std::regex numRegex("(\\+|-)?[0-9]+\\.?([0-9]+)?");
 
   Token token{type, numLiteral, mLine, mColumn};
   mColumn += value.size();
