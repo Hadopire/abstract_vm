@@ -176,13 +176,11 @@ void Machine::print(const Token & token) {
     error("'print' on empty stack", token.line, token.column);
   }
 
-  try {
-    const IOperand * iOperand = mStack.front();
-    const Operand<int8_t> * operand = dynamic_cast<const Operand<int8_t> *>(iOperand);
-
-    std::cout << static_cast<char>(std::stoi(operand->toString()));
+  const IOperand * iOperand = mStack.front();
+  if (iOperand->getType() == eOperandType::kInt8) {
+    std::cout << static_cast<char>(std::stoi(iOperand->toString()));
   }
-  catch (const std::bad_cast & e) {
+  else {
     error("value at the top of the stack not a 8bit integer", token.line, token.column);
   }
 }
@@ -200,7 +198,7 @@ void Machine::assert(const Token & token, eOperandType type, const std::string &
 
   const IOperand * front = mStack.front();
   std::string frontStackValue = front->toString();
-  if (frontStackValue.compare(value) != 0) {
+  if (frontStackValue.compare(value) != 0 || front->getType() != type) {
     error("assert fail", token.line, token.column);
   }
 }
