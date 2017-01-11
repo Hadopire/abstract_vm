@@ -46,7 +46,7 @@ void Machine::add(const Token & token) {
   mStack.pop_front();
 
   try {
-    mStack.push_front(*v1 + *v2);
+    mStack.push_front(*v2 + *v1);
   }
   catch (IOperandFactory::Exception & e) {
     error(e.what(), token.line, token.column);
@@ -67,7 +67,7 @@ void Machine::sub(const Token & token) {
   mStack.pop_front();
 
   try {
-    mStack.push_front(*v1 - *v2);
+    mStack.push_front(*v2 - *v1);
   }
   catch (IOperandFactory::Exception & e) {
     error(e.what(), token.line, token.column);
@@ -88,7 +88,7 @@ void Machine::mul(const Token & token) {
   mStack.pop_front();
 
   try {
-    mStack.push_front(*v1 * *v2);
+    mStack.push_front(*v2 * *v1);
   }
   catch (IOperandFactory::Exception & e) {
     error(e.what(), token.line, token.column);
@@ -113,7 +113,7 @@ void Machine::div(const Token & token) {
   }
 
   try {
-    mStack.push_front(*v1 / *v2);
+    mStack.push_front(*v2 / *v1);
   }
   catch (IOperandFactory::Exception & e) {
     error(e.what(), token.line, token.column);
@@ -138,7 +138,7 @@ void Machine::mod(const Token & token) {
   }
 
   try {
-    mStack.push_front(*v1 % *v2);
+    mStack.push_front(*v2 % *v1);
   }
   catch (IOperandFactory::Exception & e) {
     error(e.what(), token.line, token.column);
