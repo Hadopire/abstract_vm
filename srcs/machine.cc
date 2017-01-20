@@ -108,7 +108,7 @@ void Machine::div(const Token & token) {
   const IOperand *v2 = mStack.front();
   mStack.pop_front();
 
-  if (v2->toString() == "0") {
+  if (v1->toString() == "0") {
     error("division by 0", token.line, token.column);
   }
 
@@ -133,7 +133,7 @@ void Machine::mod(const Token & token) {
   const IOperand *v2 = mStack.front();
   mStack.pop_front();
 
-  if (v2->toString() == "0") {
+  if (v1->toString() == "0") {
     error("mod by 0", token.line, token.column);
   }
 
